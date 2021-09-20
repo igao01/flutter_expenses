@@ -1,5 +1,9 @@
+import 'package:expenses/components/adaptive_date_picker.dart';
+import 'package:expenses/components/adaptive_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import 'adaptive_button.dart';
 
 class TransactionForm extends StatefulWidget {
   final Function(String, double, DateTime) addTransaction;
@@ -24,88 +28,70 @@ class _TransactionFormState extends State<TransactionForm> {
     widget.addTransaction(title, value, _selectedDate);
   }
 
-  _showDatePicker() {
-    showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2020),
-      lastDate: DateTime.now(),
-    ).then((pickedDate) {
-      if (pickedDate == null) {
-        return;
-      } else {
-        setState(() {
-          _selectedDate = pickedDate;
-        });
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: Padding(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          children: [
-            TextField(
-              controller: _titleController,
-              onSubmitted: (_) => _submitForm(),
-              decoration: InputDecoration(
-                labelText: 'Título',
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 5,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(
+            10,
+            10,
+            10,
+            10 + MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Column(
+            // parte da solucao para exibir o form inteiro acima do teclado
+            // https://stackoverflow.com/questions/53869078/how-to-move-bottomsheet-along-with-keyboard-which-has-textfieldautofocused-is-t/57515977#57515977
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AdaptiveTextField(
+                label: 'Título',
+                controller: _titleController,
+                onSubmit: _submitForm,
+                keyboardType: TextInputType.text,
               ),
-            ),
-            TextField(
-              controller: _valueController,
-
-              // numberWithOption(decimal true) especifica para o IOS exibir
-              // o teclado numérico com separador ponto ou virgula
-              // caso contrario só exibira números
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-
-              // atribui uma funcao ao botao submit presente no teclado
-              // quando utilizado ( _ ) indica que a funcao recebe um parametro
-              // mas não será utilizado
-              onSubmitted: (_) => _submitForm(),
-              decoration: InputDecoration(
-                labelText: 'Valor (R\$)',
+              AdaptiveTextField(
+                label: 'Valor (R\$)',
+                controller: _valueController,
+                onSubmit: _submitForm,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
               ),
-            ),
-            Container(
-              height: 70,
-              child: Row(
+              /* TextField(
+                controller: _valueController,
+
+                // numberWithOption(decimal true) especifica para o IOS exibir
+                // o teclado numérico com separador ponto ou virgula
+                // caso contrario só exibira números
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+
+                // atribui uma funcao ao botao submit presente no teclado
+                // quando utilizado ( _ ) indica que a funcao recebe um parametro
+                // mas não será utilizado
+                onSubmitted: (_) => _submitForm(),
+                decoration: InputDecoration(
+                  labelText: 'Valor (R\$)',
+                ),
+              ), */
+              AdaptiveDatePicker(
+                selectedDate: _selectedDate,
+                onDateChanged: (newDate) {
+                  setState(() {
+                    _selectedDate = newDate;
+                  });
+                },
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Expanded(
-                    child: Text(
-                      _selectedDate == DateTime(0000)
-                          ? 'Nenhuma data seleciona'
-                          : 'Data: ${DateFormat('dd/MM/yyyy').format(_selectedDate)}',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: _showDatePicker,
-                    child: Text(
-                      'Selecione uma data',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
+                  AdaptiveButton(
+                    onPressed: _submitForm,
+                    label: 'Nova Transação',
                   ),
                 ],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                  onPressed: _submitForm,
-                  child: Text(
-                    'Nova Transação',
-                  ),
-                ),
-              ],
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
