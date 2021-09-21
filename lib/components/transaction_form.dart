@@ -1,7 +1,6 @@
 import 'package:expenses/components/adaptive_date_picker.dart';
 import 'package:expenses/components/adaptive_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'adaptive_button.dart';
 
@@ -23,7 +22,7 @@ class _TransactionFormState extends State<TransactionForm> {
     final title = _titleController.text;
     final value = double.parse(_valueController.text);
 
-    if (title.isEmpty || value <= 0 || _selectedDate == null) return;
+    if (title.isEmpty || value <= 0) return;
 
     widget.addTransaction(title, value, _selectedDate);
   }

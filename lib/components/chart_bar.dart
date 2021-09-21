@@ -25,11 +25,11 @@ class ChartBar extends StatelessWidget {
               child: FittedBox(
                 child: Text(
                   '${value.toStringAsFixed(2)}',
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
               ),
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             Container(
               height: constraints.maxHeight * 0.6,
               width: 10,
@@ -64,7 +64,7 @@ class ChartBar extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             Container(
               height: constraints.maxHeight * 0.15,
               child: Text('$day'),

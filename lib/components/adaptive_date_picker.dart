@@ -47,12 +47,12 @@ class AdaptiveDatePicker extends StatelessWidget {
                     selectedDate == DateTime(0000)
                         ? 'Nenhuma data seleciona'
                         : 'Data: ${DateFormat('dd/MM/yyyy').format(selectedDate)}',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
                 TextButton(
                   onPressed: () => _showDatePicker(context),
-                  child: Text(
+                  child: const Text(
                     'Selecione uma data',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
